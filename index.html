@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap">
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #DBB7FF;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeAndSlideIn 0.5s forwards;
+        }
+
+        .question {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeAndSlideIn 0.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            margin-bottom: 30px;
+        }
+
+        .question:first-child {
+            display: block;
+        }
+
+        .question h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .question p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .provider-container {
+            display: flex; /* Display providers horizontally */
+            justify-content: space-between; /* Spacing between providers */
+            align-items: center;
+        }
+
+        .provider {
+    flex: 1;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
+        
+        .provider:hover {
+    background-color: #f9f9f9;
+    cursor: pointer; /* Change cursor on hover to indicate interactivity */
+}
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .next-button, .back-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .back-button {
+            background-color: #6C757D;
+        }
+
+        .next-button:hover, .back-button:hover {
+            background-color: #0056B3;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .vendor-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .vendor {
+            flex: 1;
+            text-align: center;
+            max-width: 48%;
+            margin: 7px;
+            padding: 20px;
+            background-color: #F9F9F9;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s, transform 0.3s;
+            overflow: hidden;
+        }
+
+        .vendor:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .vendor h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .vendor-price {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        .vendor-chart {
+            background-color: #007BFF;
+            height: 20px;
+            border-radius: 5px;
+            max-width: 100%;
+            width: 0;
+            transition: width 0.5s, box-shadow 0.5s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .vendor-chart:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes fadeAndSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 100%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .vendor-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            .vendor {
+                width: 100%;
+            }
+        }
+      
+      /* Add this media query to your existing CSS */
+@media (max-width: 768px) {
+    .provider-container {
+        flex-direction: column; /* Stack providers vertically on mobile */
+    }
+
+    .provider {
+        flex: 1;
+        text-align: center;
+        background-color: #FFFFFF;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h4>SMS Price Comparison Calculator</h4>
+        <form id="calculatorForm">
+            <div class="question" id="question1">
+                <h2>Step 1: Choose SMS Providers</h2>
+                <p>Select up to 3 SMS providers:</p>
+                <div class="options provider-container">
+                    <div class="provider">
+                        <label>
+                            <select name="provider1" id="provider1">
+                                <option value="" disabled selected>Select Provider 1</option>
+                                <option value="SNS">SNS</option>
+                                <option value="Bandwidth">Bandwidth</option>
+                                <option value="Telnyx">Telnyx</option>
+                                <option value="Ooma">Ooma</option>
+                                <option value="RingCentral">Ring Central</option>
+                                <option value="Twilio">Twilio</option>
+                                <option value="Vonage">Vonage</option>
+                                <option value="Plivo">Plivo</option>
+                                <option value="Sinch">Sinch</option>
+                                <option value="MessageBird">MessageBird</option>
+                                <option value="Karix">Karix</option>
+                                <option value="Exotel">Exotel</option>
+                                <option value="Gupshup">Gupshup</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="provider">
+                        <label>
+                            <select name="provider2" id="provider2">
+                                <option value="" disabled selected>Select Provider 2</option>
+                                <option value="SNS">SNS</option>
+                                <option value="Bandwidth">Bandwidth</option>
+                                <option value="Telnyx">Telnyx</option>
+                                <option value="Ooma">Ooma</option>
+                                <option value="RingCentral">Ring Central</option>
+                                <option value="Twilio">Twilio</option>
+                                <option value="Vonage">Vonage</option>
+                                <option value="Plivo">Plivo</option>
+                                <option value="Sinch">Sinch</option>
+                                <option value="MessageBird">MessageBird</option>
+                                <option value="Karix">Karix</option>
+                                <option value="Exotel">Exotel</option>
+                                <option value="Gupshup">Gupshup</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="provider">
+                        <label>
+                            <select name="provider3" id="provider3">
+                                <option value="" disabled selected>Select Provider 3</option>
+                                <option value="SNS">SNS</option>
+                                <option value="Bandwidth">Bandwidth</option>
+                                <option value="Telnyx">Telnyx</option>
+                                <option value="Ooma">Ooma</option>
+                                <option value="RingCentral">Ring Central</option>
+                                <option value="Twilio">Twilio</option>
+                                <option value="Vonage">Vonage</option>
+                                <option value="Plivo">Plivo</option>
+                                <option value="Sinch">Sinch</option>
+                                <option value="MessageBird">MessageBird</option>
+                                <option value="Karix">Karix</option>
+                                <option value="Exotel">Exotel</option>
+                                <option value="Gupshup">Gupshup</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="next-button" onclick="nextStep(2)">Next</button>
+                </div>
+            </div>
+           <div class="question" id="question2">
+    <h2>Step 2: Choose Number Type</h2>
+    <p>What type of number will you use to send and receive messages?</p>
+    <div class="options">
+        <label>
+            <input type="radio" name="numberType" value="tollFree">
+            Toll-Free Number
+        </label>
+        <label>
+            <input type="radio" name="numberType" value="local">
+            Local Number
+        </label>
+    </div>
+    <div class="button-container">
+        <button type="button" class="back-button" onclick="prevStep(1)">Back</button>
+        <button type="button" class="next-button" onclick="nextStep(3)">Next</button>
+    </div>
+</div>
+
+            <div class="question" id="question3">
+                <h2>Step 3: SMS Sending</h2>
+                <p>How many SMS messages will you be sending per month?</p>
+                <div class="options">
+                    <label>
+                        <input type="number" id="smsSentInput" placeholder="Enter number of SMS">
+                    </label>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="back-button" onclick="prevStep(2)">Back</button>
+                    <button type="button" class="next-button" onclick="nextStep(4)">Next</button>
+                </div>
+            </div>
+            <div class="question" id="question4">
+                <h2>Step 4: SMS Receiving</h2>
+                <p>How many SMS messages are you expecting to receive per month?</p>
+                <div class="options">
+                    <label>
+                        <input type="number" id="smsReceivedInput" placeholder="Enter number of SMS">
+                    </label>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="back-button" onclick="prevStep(3)">Back</button>
+                    <button type="button" class="next-button" onclick="calculatePrice()">Calculate</button>
+                </div>
+            </div>
+            <div class="question" id="question5">
+    <h2>Price Comparison</h2>
+                <div class="vendor-container">
+                    <div class="vendor">
+                        <h4><span id="provider1Name"></span></h4>
+                        <p class="vendor-price" id="provider1Price">$0.00</p>
+                        <div class="vendor-chart" id="provider1Chart"></div>
+                    </div>
+                    <div class="vendor">
+                        <h4><span id="provider2Name"></span></h4>
+                        <p class="vendor-price" id="provider2Price">$0.00</p>
+                        <div class="vendor-chart" id="provider2Chart"></div>
+                    </div>
+                    <div class="vendor">
+                        <h4><span id="provider3Name"></span></h4>
+                        <p class="vendor-price" id="provider3Price">$0.00</p>
+                        <div class="vendor-chart" id="provider3Chart"></div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="back-button" onclick="prevStep(4)">Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>

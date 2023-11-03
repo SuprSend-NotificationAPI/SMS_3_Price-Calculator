@@ -249,18 +249,30 @@ providerDropdowns.forEach((dropdown, index) => {
 
 
     function displayPrice(priceProvider1, priceProvider2, priceProvider3) {
-        const provider1PriceElement = document.getElementById('provider1Price');
-        const provider2PriceElement = document.getElementById('provider2Price');
-        const provider3PriceElement = document.getElementById('provider3Price');
-        const provider1ChartElement = document.getElementById('provider1Chart');
-        const provider2ChartElement = document.getElementById('provider2Chart');
-        const provider3ChartElement = document.getElementById('provider3Chart');
+    const provider1PriceElement = document.getElementById('provider1Price');
+    const provider2PriceElement = document.getElementById('provider2Price');
+    const provider3PriceElement = document.getElementById('provider3Price');
+    const provider1ChartElement = document.getElementById('provider1Chart');
+    const provider2ChartElement = document.getElementById('provider2Chart');
+    const provider3ChartElement = document.getElementById('provider3Chart');
 
-        provider1PriceElement.innerText = `$${priceProvider1}`;
-        provider2PriceElement.innerText = `$${priceProvider2}`;
-        provider3PriceElement.innerText = `$${priceProvider3}`;
+    // Calculate the maximum price among the three providers
+    const maxPrice = Math.max(priceProvider1, priceProvider2, priceProvider3);
 
-        provider1ChartElement.style.width = `${priceProvider1 * 20}px`;
-        provider2ChartElement.style.width = `${priceProvider2 * 20}px`;
-        provider3ChartElement.style.width = `${priceProvider3 * 20}px`;
-    }
+    // Normalize the prices
+    const normalizedPriceProvider1 = priceProvider1 / maxPrice;
+    const normalizedPriceProvider2 = priceProvider2 / maxPrice;
+    const normalizedPriceProvider3 = priceProvider3 / maxPrice;
+
+    // Use a constant scale for the chart elements (e.g., a scale factor of 100)
+    const scaleFactor = 100;
+
+    // Set the chart width based on the normalized prices and scale factor
+    provider1ChartElement.style.width = `${normalizedPriceProvider1 * scaleFactor}%`;
+    provider2ChartElement.style.width = `${normalizedPriceProvider2 * scaleFactor}%`;
+    provider3ChartElement.style.width = `${normalizedPriceProvider3 * scaleFactor}%`;
+
+    provider1PriceElement.innerText = `$${priceProvider1}`;
+    provider2PriceElement.innerText = `$${priceProvider2}`;
+    provider3PriceElement.innerText = `$${priceProvider3}`;
+}
